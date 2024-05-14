@@ -5,11 +5,9 @@ description = "Automatically updates the pinned version of a pySigma in pyprojec
 authors = ["Stephen Lincoln <stephen.lincoln@attackiq.com>"]
 license = "LGPL-3.0-only"
 readme = "README.md"
-packages = [{include = "pysigma_auto_update"}]
 
 [tool.poetry.dependencies]
 python = ">=3.8, <=3.12"
-toml = "^0.10.2"
 pytest = "^8.2.0"
 toml = "^0.10.2"
 packaging = "^24.0"
