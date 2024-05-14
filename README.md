@@ -32,7 +32,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Use Update Pysigma Version action
-        uses: your-username/your-action-repo@v1
+        uses: slincoln-aiq/pysigma-auto-update@v1
         with:
           dry_run: false
 ```
