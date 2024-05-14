@@ -22,7 +22,7 @@ def get_latest_release(repo_name: str) -> Version:
 
 
 def preprocess_specifier(specifier: str) -> str:
-    """Preprocess the specifier to handle the caret operator.
+    """Preprocess the specifier to handle the caret (^), tilde (~), and wildcard (*) operators.
 
     Args:
         specifier: The specifier string.
@@ -35,7 +35,21 @@ def preprocess_specifier(specifier: str) -> str:
         major, minor, _ = version.split(".")
         upper_bound = f"<{int(major) + 1}.0.0"
         return f">={version}, {upper_bound}"
-    return specifier
+    elif specifier.startswith("~"):
+        version = specifier[1:]
+        major, minor, _ = version.split(".")
+        upper_bound = f"<{major}.{int(minor) + 1}.0"
+        return f">={version}, {upper_bound}"
+    elif "*" in specifier:
+        parts = specifier.split(".")
+        if len(parts) == 3:
+            major, minor, _ = parts
+            if major == "*":
+                return ">=0.0.0"
+            elif minor == "*":
+                return f">={major}.0.0, <{int(major) + 1}.0.0"
+            else:
+                return f">={major}.{minor}.0, <{major}.{int(minor) + 1}.0"
 
 
 def merge_specifiers(current_specifiers: SpecifierSet, latest_version: str) -> SpecifierSet:
@@ -77,7 +91,11 @@ def read_pyproject_version(path: str = "pyproject.toml") -> SpecifierSet:
     """
     with open(path, "r") as f:
         pyproject_data = toml.load(f)
-    specifiers = pyproject_data["tool"]["poetry"]["dependencies"]["pysigma"]
+    try:
+        specifiers = pyproject_data["tool"]["poetry"]["dependencies"]["pysigma"]
+    except Exception as e:
+        print("Error reading pyproject.toml file. Ensure pysigma is specified.")
+        sys.exit(2)
     # Handle multiple specifiers
     if "," in specifiers:
         return SpecifierSet(", ".join(preprocess_specifier(spec) for spec in specifiers.split(",")))
@@ -97,6 +115,7 @@ def update_pyproject_version(path: str, new_specifier: SpecifierSet):
     pyproject_data["tool"]["poetry"]["dependencies"]["pysigma"] = str(new_specifier)
     with open(path, "w") as f:
         toml.dump(pyproject_data, f)
+    print(f"Success! Updated pySigma version in pyproject.toml to {str(new_specifier)}!")
 
 
 def main(dry_run: bool = False):
@@ -110,16 +129,20 @@ def main(dry_run: bool = False):
     pyproject_path = "pyproject.toml"
 
     latest_version = get_latest_release(repo_name)
+    print("Latest version:", latest_version)
     current_specifiers = read_pyproject_version(pyproject_path)
+    print("Current specifiers:", current_specifiers)
 
     if latest_version not in current_specifiers:
+        print("Update required. Current version:", str(current_specifiers), "Latest version:", str(latest_version))
         new_specifiers_set = merge_specifiers(current_specifiers, latest_version)
         if not dry_run:
             update_pyproject_version(pyproject_path, new_specifiers_set)
             print(f"Updated pyproject.toml to include {latest_version}")
             sys.exit(1)  # Exit with code 1 to indicate update
+    else:
+        print("No update required.")
 
-    print("No update required.")
     sys.exit(0)  # Exit with code 0 to indicate no update
 
 

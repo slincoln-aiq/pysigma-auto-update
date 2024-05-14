@@ -23,6 +23,34 @@ class TestUpdatePysigma:
         """
 
     @pytest.fixture
+    def mock_toml_file_tilde(self):
+        return """
+        [tool.poetry.dependencies]
+        pysigma = "~0.10.0"
+        """
+
+    @pytest.fixture
+    def mock_toml_file_wildcard_major(self):
+        return """
+        [tool.poetry.dependencies]
+        pysigma = "1.*"
+        """
+
+    @pytest.fixture
+    def mock_toml_file_wildcard_minor(self):
+        return """
+        [tool.poetry.dependencies]
+        pysigma = "1.2.*"
+        """
+
+    @pytest.fixture
+    def mock_toml_file_wildcard_any(self):
+        return """
+        [tool.poetry.dependencies]
+        pysigma = "*"
+        """
+
+    @pytest.fixture
     def mock_toml_file_minimum(self):
         return """
         [tool.poetry.dependencies]
@@ -92,14 +120,100 @@ class TestUpdatePysigma:
         "builtins.open",
         new_callable=mock_open,
         read_data="""
-            [tool.poetry.dependencies]
-            pysigma = "^0.10.0"
-        """,
+        [tool.poetry.dependencies]
+        pysigma = "^0.10.0"
+    """,
     )
     @patch("toml.dump")
     def test_update_version_caret(self, mock_toml_dump, mock_open, mock_get_latest_release, mock_toml_file_caret):
         mock_get_latest_release.return_value = Version("0.10.7")
         preprocessed_spec = SpecifierSet(">=0.10.0, <0.11.0")
+        with patch("scripts.update_pysigma.read_pyproject_version", return_value=preprocessed_spec):
+            with pytest.raises(SystemExit) as e:
+                updater.main(dry_run=False)
+            assert e.type == SystemExit
+            assert e.value.code == 0
+            mock_toml_dump.assert_not_called()
+
+    @patch("scripts.update_pysigma.get_latest_release")
+    @patch(
+        "builtins.open",
+        new_callable=mock_open,
+        read_data="""
+        [tool.poetry.dependencies]
+        pysigma = "~0.10.0"
+    """,
+    )
+    @patch("toml.dump")
+    def test_update_version_tilde(self, mock_toml_dump, mock_open, mock_get_latest_release, mock_toml_file_tilde):
+        mock_get_latest_release.return_value = Version("0.10.7")
+        preprocessed_spec = SpecifierSet(">=0.10.0, <0.11.0")
+        with patch("scripts.update_pysigma.read_pyproject_version", return_value=preprocessed_spec):
+            with pytest.raises(SystemExit) as e:
+                updater.main(dry_run=False)
+            assert e.type == SystemExit
+            assert e.value.code == 0
+            mock_toml_dump.assert_not_called()
+
+    @patch("scripts.update_pysigma.get_latest_release")
+    @patch(
+        "builtins.open",
+        new_callable=mock_open,
+        read_data="""
+        [tool.poetry.dependencies]
+        pysigma = "1.*"
+    """,
+    )
+    @patch("toml.dump")
+    def test_update_version_wildcard_major(
+        self, mock_toml_dump, mock_open, mock_get_latest_release, mock_toml_file_wildcard_major
+    ):
+        mock_get_latest_release.return_value = Version("1.3.0")
+        preprocessed_spec = SpecifierSet(">=1.0.0, <2.0.0")
+        with patch("scripts.update_pysigma.read_pyproject_version", return_value=preprocessed_spec):
+            with pytest.raises(SystemExit) as e:
+                updater.main(dry_run=False)
+            assert e.type == SystemExit
+            assert e.value.code == 0
+            mock_toml_dump.assert_not_called()
+
+    @patch("scripts.update_pysigma.get_latest_release")
+    @patch(
+        "builtins.open",
+        new_callable=mock_open,
+        read_data="""
+        [tool.poetry.dependencies]
+        pysigma = "1.2.*"
+    """,
+    )
+    @patch("toml.dump")
+    def test_update_version_wildcard_minor(
+        self, mock_toml_dump, mock_open, mock_get_latest_release, mock_toml_file_wildcard_minor
+    ):
+        mock_get_latest_release.return_value = Version("1.2.5")
+        preprocessed_spec = SpecifierSet(">=1.2.0, <1.3.0")
+        with patch("scripts.update_pysigma.read_pyproject_version", return_value=preprocessed_spec):
+            with pytest.raises(SystemExit) as e:
+                updater.main(dry_run=False)
+            assert e.type == SystemExit
+            assert e.value.code == 0
+            mock_toml_dump.assert_not_called()
+
+    @patch("scripts.update_pysigma.get_latest_release")
+    @patch(
+        "builtins.open",
+        new_callable=mock_open,
+        read_data="""
+        [tool.poetry.dependencies]
+        pysigma = "*"
+    """,
+    )
+    @patch("toml.dump")
+    def test_update_version_wildcard_any(
+        self, mock_toml_dump, mock_open, mock_get_latest_release, mock_toml_file_wildcard_any
+    ):
+        mock_get_latest_release.return_value = Version("2.0.0")
+        preprocessed_spec = SpecifierSet(">=0.0.0")
         with patch("scripts.update_pysigma.read_pyproject_version", return_value=preprocessed_spec):
             with pytest.raises(SystemExit) as e:
                 updater.main(dry_run=False)
