@@ -1,0 +1,97 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="PyCompatibilityInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ourVersions">
+        <value>
+          <list size="4">
+            <item index="0" class="java.lang.String" itemvalue="3.8" />
+            <item index="1" class="java.lang.String" itemvalue="3.9" />
+            <item index="2" class="java.lang.String" itemvalue="3.10" />
+            <item index="3" class="java.lang.String" itemvalue="3.11" />
+          </list>
+        </value>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredPackages">
+        <value>
+          <list size="65">
+            <item index="0" class="java.lang.String" itemvalue="waitress" />
+            <item index="1" class="java.lang.String" itemvalue="python-dateutil" />
+            <item index="2" class="java.lang.String" itemvalue="pyppeteer" />
+            <item index="3" class="java.lang.String" itemvalue="flatten-json" />
+            <item index="4" class="java.lang.String" itemvalue="plotly" />
+            <item index="5" class="java.lang.String" itemvalue="requests" />
+            <item index="6" class="java.lang.String" itemvalue="Jinja2" />
+            <item index="7" class="java.lang.String" itemvalue="dash-bootstrap-components" />
+            <item index="8" class="java.lang.String" itemvalue="pandas" />
+            <item index="9" class="java.lang.String" itemvalue="pytz" />
+            <item index="10" class="java.lang.String" itemvalue="urllib3" />
+            <item index="11" class="java.lang.String" itemvalue="dash" />
+            <item index="12" class="java.lang.String" itemvalue="Flask" />
+            <item index="13" class="java.lang.String" itemvalue="tqdm" />
+            <item index="14" class="java.lang.String" itemvalue="mitreattack-python" />
+            <item index="15" class="java.lang.String" itemvalue="pysigma-pipeline-sysmon" />
+            <item index="16" class="java.lang.String" itemvalue="pysigma-backend-splunk" />
+            <item index="17" class="java.lang.String" itemvalue="splunk-sdk" />
+            <item index="18" class="java.lang.String" itemvalue="pysigma" />
+            <item index="19" class="java.lang.String" itemvalue="pysigma-pipeline-windows" />
+            <item index="20" class="java.lang.String" itemvalue="fsf_core" />
+            <item index="21" class="java.lang.String" itemvalue="marshmallow" />
+            <item index="22" class="java.lang.String" itemvalue="collect_files_phase" />
+            <item index="23" class="java.lang.String" itemvalue="PyDriller" />
+            <item index="24" class="java.lang.String" itemvalue="pylzma" />
+            <item index="25" class="java.lang.String" itemvalue="netaddr" />
+            <item index="26" class="java.lang.String" itemvalue="yara-python" />
+            <item index="27" class="java.lang.String" itemvalue="psutil" />
+            <item index="28" class="java.lang.String" itemvalue="openai" />
+            <item index="29" class="java.lang.String" itemvalue="langchain" />
+            <item index="30" class="java.lang.String" itemvalue="tiktoken" />
+            <item index="31" class="java.lang.String" itemvalue="sigmaiq" />
+            <item index="32" class="java.lang.String" itemvalue="native_api_phase" />
+            <item index="33" class="java.lang.String" itemvalue="native_api_util" />
+            <item index="34" class="java.lang.String" itemvalue="coverage" />
+            <item index="35" class="java.lang.String" itemvalue="pytest" />
+            <item index="36" class="java.lang.String" itemvalue="tzdata" />
+            <item index="37" class="java.lang.String" itemvalue="black" />
+            <item index="38" class="java.lang.String" itemvalue="pillow" />
+            <item index="39" class="java.lang.String" itemvalue="lxml" />
+            <item index="40" class="java.lang.String" itemvalue="numpy" />
+            <item index="41" class="java.lang.String" itemvalue="attrs" />
+            <item index="42" class="java.lang.String" itemvalue="beautifulsoup4" />
+            <item index="43" class="java.lang.String" itemvalue="artifactory" />
+            <item index="44" class="java.lang.String" itemvalue="typer" />
+            <item index="45" class="java.lang.String" itemvalue="PyYAML" />
+            <item index="46" class="java.lang.String" itemvalue="taxii2-client" />
+            <item index="47" class="java.lang.String" itemvalue="python-dotenv" />
+            <item index="48" class="java.lang.String" itemvalue="aiq_api" />
+            <item index="49" class="java.lang.String" itemvalue="vulcano" />
+            <item index="50" class="java.lang.String" itemvalue="python-gitlab" />
+            <item index="51" class="java.lang.String" itemvalue="atlassian-python-api" />
+            <item index="52" class="java.lang.String" itemvalue="toml" />
+            <item index="53" class="java.lang.String" itemvalue="ntm-util" />
+            <item index="54" class="java.lang.String" itemvalue="jinja2" />
+            <item index="55" class="java.lang.String" itemvalue="sync_ref_cli" />
+            <item index="56" class="java.lang.String" itemvalue="cookiecutter" />
+            <item index="57" class="java.lang.String" itemvalue="pycryptodomex" />
+            <item index="58" class="java.lang.String" itemvalue="virtualenv" />
+            <item index="59" class="java.lang.String" itemvalue="semver" />
+            <item index="60" class="java.lang.String" itemvalue="launchdarkly-api" />
+            <item index="61" class="java.lang.String" itemvalue="google-search-results" />
+            <item index="62" class="java.lang.String" itemvalue="gitpython" />
+            <item index="63" class="java.lang.String" itemvalue="stix2-patterns" />
+            <item index="64" class="java.lang.String" itemvalue="jsonschema" />
+          </list>
+        </value>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredIdentifiers">
+        <list>
+          <option value="langchain.schema.vectorstore.VectorStore.create_local" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>

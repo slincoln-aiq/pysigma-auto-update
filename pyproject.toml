@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "pysigma-auto-update"
+version = "1.0.0"
+description = "Automatically updates the pinned version of a pySigma in pyproject.toml and create a new release for a pySigma backend or pipeline project."
+authors = ["Stephen Lincoln <stephen.lincoln@attackiq.com>"]
+license = "LGPL-3.0-only"
+readme = "README.md"
+packages = [{include = "pysigma_auto_update"}]
+
+[tool.poetry.dependencies]
+python = ">=3.8, <=3.12"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.2.0"
+toml = "^0.10.2"
+packaging = "^24.0"
+requests = "^2.31.0"
+black = "^24.4.2"
+coverage = "^7.5.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

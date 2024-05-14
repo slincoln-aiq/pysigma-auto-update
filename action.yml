@@ -1,0 +1,70 @@
+name: 'Update Pysigma Version'
+description: 'Automatically update the pinned version of Pysigma in pyproject.toml and handle the semantic versioning.'
+inputs:
+  dry_run:
+    description: 'Run the workflow without creating tags or releases'
+    required: false
+    default: 'false'
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+
+    - name: Install Poetry
+      run: |
+        curl -sSL https://install.python-poetry.org | python3 -
+        export PATH="$HOME/.local/bin:$PATH"
+
+    - name: Install dependencies
+      run: |
+        export PATH="$HOME/.local/bin:$PATH"
+        poetry install
+
+    - name: Run script and check for updates
+      id: update_check
+      run: |
+        export PATH="$HOME/.local/bin:$PATH"
+        poetry run python ${{ github.action_path }}/scripts/update-pysigma.py ${{ inputs.dry_run }} || echo "updated=true" >> $GITHUB_ENV
+
+    - name: Commit and push changes if updated
+      if: env.updated == 'true' && inputs.dry_run == 'false'
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add pyproject.toml
+        git commit -m "Update pysigma version to the latest"
+        git push
+
+    - name: Run tests
+      if: env.updated == 'true' && inputs.dry_run == 'false'
+      run: |
+        export PATH="$HOME/.local/bin:$PATH"
+        poetry run pytest tests
+
+    - name: Determine new version tag
+      id: determine_tag
+      if: env.updated == 'true' && inputs.dry_run == 'false'
+      run: |
+        latest_tag=$(git describe --tags `git rev-list --tags --max-count=1`)
+        latest_tag=${latest_tag#v}
+        IFS='.' read -r -a tag_parts <<< "$latest_tag"
+        new_patch=$((tag_parts[2] + 1))
+        new_tag="v${tag_parts[0]}.${tag_parts[1]}.$new_patch"
+        echo "new_version_tag=$new_tag" >> $GITHUB_ENV
+
+    - name: Tag and push
+      if: env.updated == 'true' && inputs.dry_run == 'false' && success()
+      run: |
+        git tag ${{ env.new_version_tag }}
+        git push origin ${{ env.new_version_tag }}
+
+    - name: Create GitHub release
+      if: env.updated == 'true' && inputs.dry_run == 'false' && success()
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ env.new_version_tag }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
