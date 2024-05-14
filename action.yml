@@ -11,7 +11,7 @@ runs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12']
+        python-version: '3.11'
 
     - name: Cache Poetry
       uses: actions/cache@v2
@@ -28,6 +28,11 @@ runs:
         curl -sSL https://install.python-poetry.org | python3 -
         export PATH="$HOME/.local/bin:$PATH"
 
+    - name: Update lock file
+      run: |
+        export PATH="$HOME/.local/bin:$PATH"
+        poetry lock --no-update
+
     - name: Install dependencies
       run: |
         export PATH="$HOME/.local/bin:$PATH"
@@ -37,7 +42,7 @@ runs:
       id: update_check
       run: |
         export PATH="$HOME/.local/bin:$PATH"
-        poetry run python ${{ github.action_path }}/scripts/update-pysigma.py ${{ inputs.dry_run }}
+        poetry run python ${{ github.action_path }}/scripts/update_pysigma.py ${{ inputs.dry_run }}
       env:
         GITHUB_ENV: updated=true
 

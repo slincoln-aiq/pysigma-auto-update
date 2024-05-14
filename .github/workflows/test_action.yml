@@ -1,0 +1,46 @@
+name: Test Update Pysigma Version
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          export PATH="$HOME/.local/bin:$PATH"
+
+      - name: Copy test pyproject.toml
+        run: cp tests/test_pyproject.toml pyproject.toml
+
+      - name: Update lock file
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          poetry lock --no-update
+
+      - name: Install dependencies
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          poetry install
+
+      - name: Run action
+        uses: ./  # Use the action from the current repository
+        with:
+          dry_run: 'false'
